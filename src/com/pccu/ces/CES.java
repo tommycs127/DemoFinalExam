@@ -19,15 +19,29 @@ public class CES extends Student {
 	private static ArrayList<Student> list ;
 	
 	private static void ReadFile (String filepath) {
-		/*
-		 * Your Work !
-		 * */
+		
 	}
 	
 	private static void WriteFile (ArrayList<Student> list, String filepath) {
-		/*
-		 * Your Work !
-		 * */
+		FileWriter fw = null;
+		if (!list.isEmpty()) {
+			try {
+				fw = new FileWriter(filepath);
+				for (Student s: list) {
+					fw.write(
+						s.getId() + " " +
+						s.getName() + " " +
+						s.getChi() + " " +
+						s.getEng() + " " +
+						s.getMath() + " " +
+						s.mAvg + "\n"
+						);
+				}
+				fw.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	private static void ScoreEnrollment () {
@@ -97,7 +111,6 @@ public class CES extends Student {
 
 			@Override
 			public int compare(Student o1, Student o2) {
-				// TODO Auto-generated method stub
 				if (o1.mAvg < o2.mAvg)
 					return -1;
 				else if (o1.mAvg == o2.mAvg) {
@@ -119,8 +132,6 @@ public class CES extends Student {
 	}
 	
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		
 		boolean exit = false;
 		list = new ArrayList<Student>();
 		while (exit != true) {
@@ -140,7 +151,6 @@ public class CES extends Student {
 				ScoreEnrollment ();
 				break;
 			case 2:
-				//InqueryByID ();
 				InqueryByIDFromFile("src/score.txt");
 				break;
 			case 3:
