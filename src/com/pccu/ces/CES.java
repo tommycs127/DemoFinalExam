@@ -19,7 +19,25 @@ public class CES extends Student {
 	private static ArrayList<Student> list ;
 	
 	private static void ReadFile (String filepath) {
+		list = new ArrayList<Student>();
 		
+		Scanner scan = null;
+		try {
+			scan = new Scanner(new File(filepath));
+			while (scan.hasNext()) {
+				Student s = new Student();
+				s.setId(scan.nextInt());
+				s.setName(scan.next());
+				s.setChi(scan.nextInt());
+				s.setEng(scan.nextInt());
+				s.setMath(scan.nextInt());
+				s.calAvg();
+				list.add(s);
+			}
+			scan.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private static void WriteFile (ArrayList<Student> list, String filepath) {
@@ -33,9 +51,9 @@ public class CES extends Student {
 						s.getName() + " " +
 						s.getChi() + " " +
 						s.getEng() + " " +
-						s.getMath() + " " +
-						s.mAvg + "\n"
+						s.getMath() + "\n"
 						);
+					// s.mAvg is not added in order to avoid unnecessary re-calculation if the scores are edited through other applications. 
 				}
 				fw.close();
 			} catch (IOException e) {
@@ -131,6 +149,33 @@ public class CES extends Student {
 		}
 	}
 	
+	private static void ListByScoreFromFile (String filepath) {
+		ReadFile(filepath);
+		
+		list.sort(new Comparator<Student>() {
+
+			@Override
+			public int compare(Student o1, Student o2) {
+				if (o1.mAvg < o2.mAvg)
+					return -1;
+				else if (o1.mAvg == o2.mAvg) {
+					return 0;
+				} else {
+					return 1;
+				}
+			}
+			
+		});
+		Collections.reverse(list);
+		
+		Iterator<Student> it = list.iterator();
+		while (it.hasNext()) {
+			Student s = it.next();
+			System.out.println("Id: " + s.getId() + " Name: " + s.getName() + " Avg : " + s.mAvg);
+			System.out.println("-----------------------------");
+		}
+	}
+	
 	public static void main(String[] args) {
 		boolean exit = false;
 		list = new ArrayList<Student>();
@@ -154,7 +199,7 @@ public class CES extends Student {
 				InqueryByIDFromFile("src/score.txt");
 				break;
 			case 3:
-				ListByScore ();
+				ListByScoreFromFile("src/score.txt");
 				break;
 				
 			case 0:
@@ -163,6 +208,6 @@ public class CES extends Student {
 				break ;
 			}
 		}		
-		System.out.println("Bye !");
+		System.out.println("Bye!");
 	}
 }
